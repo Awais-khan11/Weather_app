@@ -7,8 +7,8 @@ export const City = () => {
 
   const [cities, setCities] = useState([]);
   const [weather, setWeather] = useState(null);
-const [forecast, setForecast] = useState([]);
-const [selectedCity, setSelectedCity] = useState("");
+  const [forecast, setForecast] = useState([]);
+  const [selectedCity, setSelectedCity] = useState("");
 
 
 
@@ -56,12 +56,6 @@ const [selectedCity, setSelectedCity] = useState("");
     setForecast(daily);
   };
 
-
-
-
-
-
-
   return (
     <>
       <div className="app">
@@ -75,9 +69,6 @@ const [selectedCity, setSelectedCity] = useState("");
 
           </div>
           {/* //Display input data] */}
-
-
-
           {cities.map((city, index) => {
             return (
 
@@ -95,117 +86,45 @@ const [selectedCity, setSelectedCity] = useState("");
               </div>
             )
           })}
-
-
-
-
-
-
-
         </div>
 
-        {/* //Forecast section of home page */}
-        {/* <div style={{ color: 'white' }}>
-
-
-
-
+        {weather && (
           <div className="mtwc-card">
             <div className="mtwc-header">
-              <h2 className="mtwc-city-name">Model Town</h2>
+              <h2 className="mtwc-city-name">{weather.city}</h2>
               <div className="mtwc-current-info">
-                <p className="mtwc-condition">overcast clouds</p>
-                <p className="mtwc-temperature">17°C</p>
+                <p className="mtwc-condition">{weather.desc}</p>
+                <p className="mtwc-temperature">{weather.temp}°C</p>
               </div>
             </div>
 
-           
-            <div className="mtwc-cloud-icon">☁</div>
+            <div className="mtwc-cloud-icon">
+              <img
+                src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
+                alt=""
+              />
+            </div>
 
-            <p className="mtwc-forecast-title">3 Days Forcast</p>
+            <p className="mtwc-forecast-title">3 Days Forecast</p>
 
             <ul className="mtwc-forecast-list">
-              <li className="mtwc-forecast-item">
-                <span className="mtwc-day">Tuesday</span>
-                <div className="mtwc-weather-desc">
-                  <span className="mtwc-icon">☁</span>
-                  <span>Clouds</span>
-                </div>
-                <span className="mtwc-temp">17°C</span>
-              </li>
-              <li className="mtwc-forecast-item">
-                <span className="mtwc-day">Wednesday</span>
-                <div className="mtwc-weather-desc">
-                  <span className="mtwc-icon">☁</span>
-                  <span>Clouds</span>
-                </div>
-                <span className="mtwc-temp">23°C</span>
-              </li>
-              <li className="mtwc-forecast-item">
-                <span className="mtwc-day">Thursday</span>
-                <div className="mtwc-weather-desc">
-                  <span className="mtwc-icon">☁</span>
-                  <span>Clouds</span>
-                </div>
-                <span className="mtwc-temp">21°C</span>
-              </li>
+              {forecast.map((day, index) => (
+                <li className="mtwc-forecast-item" key={index}>
+                  <span className="mtwc-day">{day.day}</span>
+                  <div className="mtwc-weather-desc">
+                    <img
+                      src={`https://openweathermap.org/img/wn/${day.icon}.png`}
+                      alt=""
+                    />
+                    <span>{day.desc}</span>
+                  </div>
+                  <span className="mtwc-temp">{day.temp}°C</span>
+                </li>
+              ))}
             </ul>
           </div>
-
-
-
-        </div> */}
-
-
-       {weather && (
-  <div className="mtwc-card">
-    <div className="mtwc-header">
-      <h2 className="mtwc-city-name">{weather.city}</h2>
-      <div className="mtwc-current-info">
-        <p className="mtwc-condition">{weather.desc}</p>
-        <p className="mtwc-temperature">{weather.temp}°C</p>
+        )}
       </div>
-    </div>
-
-    <div className="mtwc-cloud-icon">
-      <img
-        src={`https://openweathermap.org/img/wn/${weather.icon}@2x.png`}
-        alt=""
-      />
-    </div>
-
-    <p className="mtwc-forecast-title">3 Days Forecast</p>
-
-    <ul className="mtwc-forecast-list">
-      {forecast.map((day, index) => (
-        <li className="mtwc-forecast-item" key={index}>
-          <span className="mtwc-day">{day.day}</span>
-          <div className="mtwc-weather-desc">
-            <img
-              src={`https://openweathermap.org/img/wn/${day.icon}.png`}
-              alt=""
-            />
-            <span>{day.desc}</span>
-          </div>
-          <span className="mtwc-temp">{day.temp}°C</span>
-        </li>
-      ))}
-    </ul>
-  </div>
-)}
-
-
-
-
-
-
-
-
-      </div>
-
-
-
-
     </>
   )
 }

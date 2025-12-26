@@ -5,20 +5,13 @@ import searchIcon from '../assets/target.png'
 import bookmark from '../assets/Bookmark.png'
 import cloud from '../assets/cloud.png'
 
+
 export const Dashboard = () => {
 
    const [data, setData] = useState({});
    const [inputCity, setInputCity] = useState("");
    const [forecast, setForecast] = useState([]);
-
-
-const saveCity=(cityName)=>{
-   const storedcities= JSON.parse(localStorage.getItem("cities")) || [];
-    if(!storedcities.includes(cityName)){
-      storedcities.push(cityName);
-      localStorage.setItem("cities", JSON.stringify(storedcities));
-   }}
-
+   
 
    const search = async (city) => {
       const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_API_KEY}`;
@@ -40,7 +33,7 @@ const saveCity=(cityName)=>{
          icon: data.weather[0].icon,
 
       });
-      saveCity(data.name);
+      // saveCity(data.name);
    };
 
    const fetchByLocation = async (lat, lon) => {
@@ -62,7 +55,7 @@ const saveCity=(cityName)=>{
          real_feel: data.main.feels_like,
          icon: data.weather[0].icon,
       });
-      saveCity(data.name);
+      // saveCity(data.name);
    };
 
    const fetchForecastByCity = async (city) => {
@@ -118,8 +111,35 @@ const saveCity=(cityName)=>{
    };
 
 
+function goToCurrentLocation() {
+
+  navigator.geolocation.getCurrentPosition(
+   (position) => {
+      const { latitude, longitude } = position.coords;
+      fetchByLocation(latitude, longitude);
+      fetchForecastByLocation(latitude, longitude);
+
+      setInputCity("");
+   },
+   (error) => {
+      console.error("Error getting location:", error);
+   }
+  )
 
 
+}
+
+function saveLocalStorage(cityName) {
+   if (!cityName) return;
+
+   const storedcities = JSON.parse(localStorage.getItem("cities")) || [];
+
+   if (!storedcities.includes(cityName)) {
+      storedcities.push(cityName);
+      localStorage.setItem("cities", JSON.stringify(storedcities));
+   }
+   alert(`${cityName} Location saved!`);
+}
 
 
 
@@ -158,13 +178,13 @@ const saveCity=(cityName)=>{
 
    return (
       <div className="app">
-         <Sidebar></Sidebar>
+         <Sidebar></Sidebar> 
 
 
          <div className="main">
             <div className="input">
-               <input onChange={(e) => setInputCity(e.target.value)} type="text" placeholder='Enter your city...' />
-               <img src={searchIcon} alt="Focus" style={{
+               <input onChange={(e) => setInputCity(e.target.value)} value={inputCity} type="text" placeholder='Enter your city...' />
+               <img onClick={goToCurrentLocation}  src={searchIcon} alt="Focus" style={{
                   height: '50px', marginTop: '30px'
                   , marginLeft: '10px', cursor: 'pointer', filter: 'invert(1)'
                }} />
@@ -176,113 +196,114 @@ const saveCity=(cityName)=>{
                   <img
                      src={bookmark}
                      alt=""
+                     onClick={()=>saveLocalStorage(data.city_name)}
                      style={{
                         height: '50px',
                         marginTop: '30px',
                         filter: 'brightness(0) invert(1)'
                      }}
-                  />
+                  /> 
                </div>
 
                <span style={{ color: 'white' }}>overcast clouds</span>
                <div className='content-div'>
                   <span style={{ color: 'white' }}>{data.tempreature}°C</span>
-                  <img src={`https://openweathermap.org/img/wn/${data.icon}@2x.png`} alt="Cloudy" style={{ color: "white", height: '80px' }} />
+                  <img src={`https://openweathermap.org/img/wn/${data.icon}@2x.png`}  alt="Cloudy" style={{ color: "white", height: '80px' }} />
                </div>
-            </div>
+            </div>  
             {/* Important Information Block */}
-            <div class="info-block">
+            <div className="info-block"> 
                <h3>Important Information</h3>
-               <div class="grid">
-                  <div class="column1">
-                     <div class="row">
-                        <div class="label">
+               <div className="grid">
+                  <div className="column1">
+                     <div className="row">
+                        <div className="label">
                            <div>
-                              <span class="icon">🌡️</span>
+                               <span className="icon">🌡️</span>
                               <span >Real Feel</span>
                            </div>
 
-                           <span class="value">{data.real_feel}°C</span>
+                           <span className="value">{data.real_feel}°C</span>
                         </div>
 
                      </div>
-                     <div class="row">
-                        <div class="label">
+                     <div className="row">
+                        <div className="label">
                            <div>
-                              <span class="icon">💧</span>
+                              <span className="icon">💧</span>
                               <span>Humidity</span>
                            </div>
 
-                           <span class="value">{data.humidity}%</span>
+                           <span className="value">{data.humidity}%</span>
                         </div>
 
                      </div>
-                     <div class="row">
-                        <div class="label">
+                     <div className="row">
+                        <div className="label">
                            <div>
-                              <span class="icon">💨</span>
+                              <span className="icon">💨</span>
                               <span>WindSpeed</span>
                            </div>
 
-                           <span class="value">{data.windSpeed}</span>
+                           <span className="value">{data.windSpeed}</span>
                         </div>
 
                      </div>
-                     <div class="row">
-                        <div class="label">
+                     <div className="row">
+                        <div className="label">
                            <div>
-                              <span class="icon">🌡️</span>
+                              <span className="icon">🌡️</span>
                               <span>Temp Min</span>
                            </div>
 
-                           <span class="value">{data.temp_min}°C</span>
+                           <span className="value">{data.temp_min}°C</span>
                         </div>
 
                      </div>
                   </div>
 
-                  <div class="column2">
-                     <div class="row">
-                        <div class="label">
+                  <div className="column2">
+                     <div className="row">
+                        <div className="label">
                            <div>
-                              <span class="icon">🌬️</span>
+                              <span className="icon">🌬️</span>
                               <span>Air Pressure</span>
                            </div>
 
-                           <span class="value">{data.Air_pressure}</span>
+                           <span className="value">{data.Air_pressure}</span>
                         </div>
 
                      </div>
-                     <div class="row">
-                        <div class="label">
+                     <div className="row">
+                        <div className="label">
                            <div>
-                              <span class="icon">💨</span>
+                              <span className="icon">💨</span>
                               <span>Wind Degree</span>
                            </div>
 
-                           <span class="value">{data.wind_degree}</span>
+                           <span className="value">{data.wind_degree}</span>
                         </div>
 
                      </div>
-                     <div class="row">
-                        <div class="label">
+                     <div className="row">
+                        <div className="label">
                            <div>
-                              <span class="icon">🌡️</span>
+                              <span className="icon">🌡️</span>
                               <span>Temp Max</span>
                            </div>
 
-                           <span class="value">{data.temp_max}°C</span>
+                           <span className="value">{data.temp_max}°C</span>
                         </div>
 
                      </div>
-                     <div class="row">
-                        <div class="label">
+                     <div className="row">
+                        <div className="label">
                            <div>
-                              <span class="icon">💨</span>
+                              <span className="icon">💨</span>
                               <span>Gust</span>
                            </div>
 
-                           <span class="value">{data.gust || 0}</span>
+                           <span className="value">{data.gust || 0}</span>
                         </div>
 
                      </div>
@@ -296,9 +317,10 @@ const saveCity=(cityName)=>{
 
 
          {/* <!-- 6 Days Forecast Block --> */}
-         <div class="forecast-block">
-            <h3 class="forecast-title">6 Days Forecast</h3>
-            <div class="forecast-list">
+        
+        <div className="forecast-block">
+            <h3 className="forecast-title">6 Days Forecast</h3>
+            <div className="forecast-list">
                {/* <!-- Day 1 --> */}
 
                <div className="forecast-list">
@@ -324,6 +346,9 @@ const saveCity=(cityName)=>{
 
             </div>
          </div>
+    
+
+
       </div>
    )
 }
