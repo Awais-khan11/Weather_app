@@ -3,6 +3,8 @@ import { Sidebar } from './Sidebar'
 import './Dashboard.css'
 import './City.css'
 
+
+
 export const City = () => {
 
   const [cities, setCities] = useState([]);
@@ -65,7 +67,7 @@ export const City = () => {
 
           {/* // COntent for Home Page */}
           <div className="input input-section">
-            <input type="text" placeholder='See Deafult city...' />
+            <input disabled type="text" placeholder='See Deafult city...' />
 
           </div>
           {/* //Display input data] */}
